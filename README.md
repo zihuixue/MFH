@@ -4,7 +4,7 @@
 Zihui Xue, Zhengqi Gao, Sucheng Ren, Hang Zhao              
 [arXiv](https://arxiv.org/abs/2206.06487) | [website](https://zihuixue.github.io/MFH/index.html)
 
-### Synthetic Gaussian
+## Synthetic Gaussian
 
 (1) Use synthetic Gaussian data to gain intuition about MFH
 
@@ -38,3 +38,14 @@ Three modes: (a) baseline-randomly keep some feature channels in x<sub>1</sub>;
 Modifying data results in different γ, we then re-apply cross-modal KD to observe the performance differences. 
 For mode (b) and (c), we observe that: although teacher performance downgrades significantly, student performance does not get affected. 
 This helps verify the MFH implication and our proposed Alg. 1 as well.
+
+
+## Citing MFH
+```
+@inproceedings{xue2023modality,
+      title={The Modality Focusing Hypothesis: Towards Understanding Crossmodal Knowledge Distillation},
+      author={Xue, Zihui and Gao, Zhengqi and Ren, Sucheng and Zhao, Hang},
+      booktitle={ICLR},
+      year={2023}
+}
+```
