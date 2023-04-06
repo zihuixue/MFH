@@ -1,7 +1,8 @@
 # The Modality Focusing Hypothesis
 
 [**The Modality Focusing Hypothesis: Towards Understanding Crossmodal Knowledge Distillation**](https://openreview.net/forum?id=w0QXrZ3N-s)                                     
-Zihui Xue, Zhengqi Gao, Sucheng Ren, Hang Zhao              
+Zihui Xue, Zhengqi Gao, Sucheng Ren, Hang Zhao            
+ICLR, 2023 (notable top-5%)  
 [arXiv](https://arxiv.org/abs/2206.06487) | [website](https://zihuixue.github.io/MFH/index.html)
 
 ## Synthetic Gaussian
