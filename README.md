@@ -6,6 +6,7 @@ ICLR, 2023 (notable top-5%)
 [arXiv](https://arxiv.org/abs/2206.06487) | [website](https://zihuixue.github.io/MFH/index.html)
 
 ## Synthetic Gaussian
+Go to directory `gauss`
 
 (1) Use synthetic Gaussian data to gain intuition about MFH
 
@@ -13,7 +14,7 @@ ICLR, 2023 (notable top-5%)
 
 
 ```shell
-python gauss/main.py
+python main.py
 ```
 Experiment 1: vary γ
 
@@ -25,7 +26,7 @@ Experiment 2: vary α
 
 (2) Verify the implications of MFH
 ```shell
-python gauss/main_modify_gamma.py
+python main_modify_gamma.py
 ```
 
 [Table 2 in the paper] Modify γ in data, and observe the performance differences of cross-modal KD.
@@ -40,6 +41,48 @@ Modifying data results in different γ, we then re-apply cross-modal KD to obser
 For mode (b) and (c), we observe that: although teacher performance downgrades significantly, student performance does not get affected. 
 This helps verify the MFH implication and our proposed Alg. 1 as well.
 
+## RAVDESS Emotion Recognition
+
+Go to directory `ravdess`
+
+Dataset: [The Ryerson Audio-Visual Database of Emotional Speech and Song (RAVDESS)](https://zenodo.org/record/1188976#.YG6fBy8RrUo). 
+
+Teacher modality: audio; Student modality: images.
+
+We provide the data splits and pre-processed features [here](https://drive.google.com/drive/folders/1fsklXuOxp-CSzH-FQ4tZ-ERuc4RsIrSh?usp=share_link). Save the folder as `ravdess/data`.
+
+(1) [optional] use Algorithm 1 to calculate the salience of modality-general decisive information for each feature channel
+```bash
+python main_overlap_tag.py --place 5 --num-permute 10 --first_time --cal_tag
+```
+`--place` controls at which layer we input multimodal features to the algorithm. The default choice is 5, which corresponds to a feature dimension of 128.  
+`--num-permute` controls the number of permutations, which corresponds to M in Algorithm 1.  
+`--first-time` will first train the unimodal networks (i.e., step 1 in Algorithm 1).  
+
+After training, the teacher checkpoint (`teacher_mod_1_overlap.pkl`) and saliency vector (`overlap_tag_teacher_place{place}_repeat{num_permute}.npy`) will be generated under the `./results` directory.  
+
+In addition, we provide the results directory [here](https://drive.google.com/drive/folders/1739ua67F650D7Ei7f9WZ57l1adLkZgOV?usp=share_link). Save the folder as `ravdess/results` and skip this step.
+
+Visualize the saliency vector.
+```bash
+python utils/helper.py
+```
+<img src="ravdess/figs/saliency_vector.png" alt="image" width="40%">
+
+The saliency vector is normalized to be [0, 1]; a larger value indicates a more salient feature channel (i.e., this channel contains more modality-general decisive information).
+
+(2) Verify MFH using the calculated saliency vector.
+```bash
+# Mode 0 - randomly remove 75% feature channels
+python main_overlap_tag.py --ratio 0.75 --mode 0 --eval_tag
+
+# Mode 1 - Modality-general KD: remove the top %r feature channels that have the least modality-general decisive info
+python main_overlap_tag.py --ratio 0.75 --mode 1 --eval_tag
+
+# Mode 2 - Modality-specific KD: remove the top %r feature channels that have the most modality-general decisive info
+python main_overlap_tag.py --ratio 0.75 --mode 2 --eval_tag
+```
+The expectation is that modality-general KD (mode 1) will yield the best student network. 
 
 ## Citing MFH
 ```
