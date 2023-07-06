@@ -49,7 +49,7 @@ Dataset: [The Ryerson Audio-Visual Database of Emotional Speech and Song (RAVDES
 
 Teacher modality: audio; Student modality: images.
 
-We provide the data splits and pre-processed features [here](https://drive.google.com/drive/folders/1fsklXuOxp-CSzH-FQ4tZ-ERuc4RsIrSh?usp=share_link). Save the folder as `ravdess/data`.
+We provide the data splits and pre-processed features [here](https://drive.google.com/drive/folders/1alZF_3UZtcmxa8yzTaKz7k3lxdOJykPn?usp=sharing). Save the folder as `ravdess/data`.
 
 (1) [optional] use Algorithm 1 to calculate the salience of modality-general decisive information for each feature channel
 ```bash
