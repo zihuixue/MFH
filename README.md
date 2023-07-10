@@ -84,6 +84,40 @@ python main_overlap_tag.py --ratio 0.75 --mode 2 --eval_tag
 ```
 The expectation is that modality-general KD (mode 1) will yield the best student network. 
 
+## VGGSound Event Classification
+
+Go to directory `vggsound`
+
+Dataset: [VGG-Sound A large scale audio-visual dataset](https://www.robots.ox.ac.uk/~vgg/data/vggsound/). 
+
+Teacher modality: audio; Student modality: video.
+
+(1) Pretrain the audio teacher model and video model.
+```bash
+cd audio
+python main_audio.py --train_dataset /path/to/vggsound/train --test_dataset /path/to/vggsound/test
+# the pretrained checkpoint will be saved at "ckpt/audio_{}_{}.pt".format(epoch, test_acc)
+cd ../video
+python main_audio.py --train_dataset /path/to/vggsound/train --test_dataset /path/to/vggsound/test
+# the pretrained checkpoint will be saved at "ckpt/audio_{}_{}.pt".format(epoch, test_acc)
+cd ..
+```
+
+(2) Calculate the salience of modality-general/specific information for each feature channel.
+```bash
+cd modality_general
+python cal_overlap_permute.py --train_dataset /path/to/vggsound/train --test_dataset /path/to/vggsound/test --a_ckpt /path/to/audio_pretrain.pth --v_ckpt /path/to/video_pretrain.pth
+# The degree of "modality-general decisive" of each channel     audio_permute.npy
+cd ..
+```
+
+(3) Verify MFH
+```bash
+cd mfh_kd
+python -m torch.distributed.launch --nproc_per_node 2 python main.py --train_dataset /path/to/vggsound/train --test_dataset /path/to/vggsound/test --a_ckpt /path/to/audio_pretrain.pth
+```
+
+
 ## Citing MFH
 ```
 @inproceedings{xue2023modality,
